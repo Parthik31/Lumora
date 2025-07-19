@@ -6,6 +6,10 @@ import os
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
+@app.route('/')
+def home():
+    return "Lumora API is running!"
+
 # Configure Gemini AI (using environment variable for API key in production)
 API_KEY = "AIzaSyB7tIM-Y579lj3BzkL2VSiCh3KdgldtRRM"
 genai.configure(api_key=API_KEY)
