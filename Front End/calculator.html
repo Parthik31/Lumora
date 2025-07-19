@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Savings Calculator | Lumora</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Lum<span>ora</span></div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="calculator">
+        <div class="container">
+            <h2>Solar Savings Calculator</h2>
+            <p>Estimate your potential savings and payback period for installing solar panels</p>
+            
+            <div class="calculator-container">
+                <form id="solar-calculator">
+                    <div class="form-group">
+                        <label for="location">Your Location</label>
+                        <select id="location" required>
+                            <option value="">Select your state</option>
+                            <option value="Surat">Surat</option>
+                            <option value="Ahmedabad">Ahmedabad</option>
+                            <option value="Mumbai">Mumbai</option>
+                            <option value="Pune">Pune</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bill">Average Monthly Electricity Bill (₹)</label>
+                        <input type="number" id="bill" min="500" max="50000" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rooftop">Available Rooftop Area (sq ft)</label>
+                        <input type="number" id="rooftop" min="50" max="5000" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="budget">Installation Budget (₹)</label>
+                        <input type="number" id="budget" min="50000" max="500000" required>
+                    </div>
+                    
+                    <button type="submit" class="btn">Calculate Savings</button>
+                </form>
+                
+                <div id="results" class="results">
+                    <h3>Your Solar Potential</h3>
+                    <p>Based on your inputs, here's what you can expect:</p>
+                    <div id="result-details"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <!-- Your existing footer content -->
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

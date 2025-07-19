@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Solar Tips | Lumora</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .loading {
+            padding: 20px;
+            text-align: center;
+            font-size: 1.2em;
+            color: #333;
+        }
+        
+        .error {
+            padding: 20px;
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            color: #d32f2f;
+        }
+        
+        .ai-tips-results {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 5px;
+        }
+        
+        #results {
+            margin-top: 30px;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Lum<span>ora</span></div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#problem">Problem</a></li>
+                    <li><a href="index.html#solution">Solution</a></li>
+                    <li><a href="index.html#sdg">SDG 7</a></li>
+                </ul>
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Tips Section -->
+    <section class="personalized-tips">
+        <div class="container">
+            <h2>Personalized Solar Tips</h2>
+            <p>AI-generated recommendations to optimize your solar setup based on your location, usage, and weather patterns</p>
+            
+            <div class="tips-categories">
+                <!-- Your existing tip categories -->
+            </div>
+            
+            <div class="get-personalized">
+                <h3>Get Customized Recommendations</h3>
+                <p>For tips specific to your solar setup, location, and usage patterns:</p>
+                <form id="personalized-tips-form">
+                    <div class="form-group">
+                        <label for="system-size">Your Solar System Size (kW)</label>
+                        <input type="number" id="system-size" min="1" max="100" step="0.1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location-tips">Your Location</label>
+                        <select id="location-tips" required>
+                            <option value="">Select your state</option>
+                            <option value="north">North India</option>
+                            <option value="south">South India</option>
+                            <option value="east">East India</option>
+                            <option value="west">West India</option>
+                            <option value="central">Central India</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="usage-pattern">Your Usage Pattern</label>
+                        <select id="usage-pattern" required>
+                            <option value="">Select your primary usage time</option>
+                            <option value="day">Mostly daytime usage</option>
+                            <option value="night">Mostly nighttime usage</option>
+                            <option value="balanced">Balanced day/night usage</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn">Get My Personalized Tips</button>
+                </form>
+                
+                <!-- Results container -->
+                <div id="results" style="display: none;">
+                    <div id="result-details"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <!-- Your existing footer content -->
+    </footer>
+
+    <script src="script.js"></script>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('personalized-tips-form');
+        
+        form.addEventListener('submit', async function(e) {
+            // Prevent default form submission
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Get form values
+            const systemsize = document.getElementById('system-size').value;
+            const locationtips = document.getElementById('location-tips').value;
+            const usagepattern = document.getElementById('usage-pattern').value;
+
+            // Validate inputs
+            if (!systemsize || !locationtips || !usagepattern) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            // Construct the AI prompt
+            const prompt = `
+Act as a solar energy expert. Based on:
+System Size: ${systemsize} kw
+Location: ${locationtips}
+Usage Pattern: ${usagepattern}
+
+Provide 5 personalized recommendations for solar panel owners in India.
+Cover these aspects:
+1. Optimal usage timing
+2. Maintenance best practices
+3. Potential upgrades
+4. Seasonal considerations
+5. Financial optimization strategies
+
+Format requirements:
+- Wrap in <div class="ai-tips-results">
+- Start with <h3>Your Personalized Solar Tips</h3>
+- Each tip in a <div class="tip"> with <h4> for title
+- Use bullet points (<ul>) for multi-part suggestions
+- Include specific numbers and actionable advice
+- Mention subsidies if applicable
+- Keep language simple and practical
+            `;
+
+            // Show loading state
+            const results = document.getElementById('results');
+            const resultDetails = document.getElementById('result-details');
+            resultDetails.innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Generating your personalized tips...
+                </div>
+            `;
+            results.style.display = 'block';
+
+            try {
+                // Send request to backend
+                const response = await fetch('http://localhost:5000/generate', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ prompt })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server responded with status ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                // Display the AI response
+                resultDetails.innerHTML = data.result;
+            } catch (error) {
+                console.error('Error:', error);
+                resultDetails.innerHTML = `
+                    <div class="error">
+                        <p><strong>Error:</strong> Could not generate tips.</p>
+                        <p>${error.message}</p>
+                        <p>Please try again later.</p>
+                    </div>
+                `;
+            }
+        });
+    });
+    </script>
+</body>
+</html>
