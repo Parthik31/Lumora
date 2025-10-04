@@ -54,7 +54,7 @@ Format requirements:
 
             try {
                 // Send request to backend
-                const response = await fetch('https://lumora-a34t.onrender.com/generate', {
+                const response = await fetch('https://lumora-1-8gzr.onrender.com/generate', {
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',
@@ -87,3 +87,4 @@ Format requirements:
             }
         });
     });
+
