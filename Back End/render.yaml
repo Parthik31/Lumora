@@ -2,9 +2,6 @@ services:
   - type: web
     name: lumora-api
     env: python
-    buildCommand: ""
-    startCommand: "gunicorn app:app"
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
     plan: free
-    envVars:
-      - key: FLASK_ENV
-        value: production
