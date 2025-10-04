@@ -1,7 +1,7 @@
 services:
   - type: web
-    name: lumora-api
+    name: lumora-backend
     env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "python app.py"
+    buildCommand: "pip install -r backend/requirements.txt"
+    startCommand: "python backend/app.py"
     plan: free
