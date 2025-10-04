@@ -11,7 +11,7 @@ def home():
     return "Lumora API is running!"
 
 # Configure Gemini AI (using environment variable for API key in production)
-API_KEY = "AIzaSyB7tIM-Y579lj3BzkL2VSiCh3KdgldtRRM"
+API_KEY = "AIzaSyCs1z3K_oD6GHD9NtlWiKAWTbFke4tfTio"
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
@@ -32,3 +32,4 @@ def generate():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
+
