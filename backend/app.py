@@ -2,18 +2,25 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import google.generativeai as genai
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
-@app.route('/')
-def home():
-    return "Lumora API is running!"
+# Configure Gemini AI using the API key from the environment variable
+try:
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY not found in .env file")
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel("gemini-2.5-flash")
+except Exception as e:
+    # This will help you debug if the key isn't loading correctly on startup
+    print(f"Error configuring Gemini AI: {e}") 
 
-# Configure Gemini AI (using environment variable for API key in production)
-API_KEY = "AIzaSyCs1z3K_oD6GHD9NtlWiKAWTbFke4tfTio"
-genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash")
 
 @app.route("/generate", methods=["POST"])
 def generate():
@@ -28,8 +35,9 @@ def generate():
         return jsonify({"result": response.text})
         
     except Exception as e:
+        # It's helpful to log the actual error on the server for debugging
+        print(f"An error occurred: {e}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
-
