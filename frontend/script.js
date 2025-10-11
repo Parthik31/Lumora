@@ -33,7 +33,7 @@ Format the response with proper HTML tags for good readability. Include headings
 
     try {
         // Send request to backend
-        const response = await fetch('https://lumora-o9k4.onrender.com/generate', {
+        const response = await fetch('https://lumora-vcmu.onrender.com/generate', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
@@ -65,6 +65,7 @@ Format the response with proper HTML tags for good readability. Include headings
         `;
     }
 });
+
 
 
 
